@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {%- include('/includes/head.html') %}
+	
+	<title>Ticket Details</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {%- include('/includes/sidebar.html') %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {%- include('/includes/topbar.html') %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                   
+					<hr>
+					{%- include('/includes/user_table.html') %}
+					
+					<hr>
+					<div class= "row">
+						
+						
+						
+						<button id="myBtn" class="ml-3">Assign New Project</button>
+						
+						<!-- The Modal -->
+						<div id="myModal" class="modal1">
+
+						  <!-- Modal content -->
+						  <div class="modal-content-1">
+							<form action="../assign-user-project" method="POST" class="form-container">
+
+								<br/>
+								<fieldset>
+								<h6> Assign New Project </h6>
+								<div class="item">
+									
+									<select name="project" id="project" style="width:30rem; height:2rem" >
+									{% for proj in data.project %}
+									  <option value={{proj.id}}> {{proj.name}}</option>
+									{% endfor %}
+									
+									</select>
+									{% for u in data.user %}
+										<input id="user_id" type="hidden" name="user_id" value="{{u.id}}" />
+									{% endfor%}
+									<br><br>
+									<div class="item">
+									<label for="role">Role<span>*</span></label> <br>
+									<select name="role" id="role" style="width:30rem; height:2rem" >
+									  <option  value="User">User</option>
+									  <option value="Developer">Developer</option>
+									  <option value="Project Manager">Project Manager</option>
+									</select>
+									</div><br>
+									<input type="submit" name="input" value="Add" href="/"></input>
+								</div>
+								</fieldset>
+							 </form>
+						  </div>
+
+						</div>
+					</div>	
+
+					<hr>
+					
+					<div class="row">
+					
+						<!-- Ticket history -->
+						<div class="detailscard shadow mb-4 ml-3">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">Projects</h6>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-bordered medium" id="dataTable_1" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th>Project Id</th>
+												<th>Name</th>                                         
+												<th></th>
+											</tr>
+										</thead>
+										
+										<tbody>
+										{% for proj in data.user_project %}
+											<tr>
+												<td>{{ proj.p_id }}</td>
+												<td>{{ proj.p_name }}</td>
+												<td>{% for u in data.user %}
+														{% if not data.is_valid_remove and data.userinfo.user_id != 1 %}
+														Remove
+														
+														{% else %}
+														<a href="/admin/delete-project-user/?user_id={{u.id}}&project_id={{proj.p_id}}" >Remove</a></td>
+														{%endif%}
+													{% endfor %}
+											</tr>
+										{% endfor %}    
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						
+					
+						
+						<!-- Ticket history -->
+						<div class="detailscard shadow mb-4 ml-3">
+							<div class="card-header py-3">
+								{% for u in data.user %}
+									{% if u.role=='Developer' %}
+									<h6 class="m-0 font-weight-bold text-primary">Tickets Assigned</h6>
+									{% elif u.role == 'User' %}
+									<h6 class="m-0 font-weight-bold text-primary">Tickets Submitted</h6>
+									{% endif %}
+								{% endfor %}
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-bordered medium" id="dataTable_2" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												<th>Ticket Id</th>
+												<th>Title</th>                                         
+												<th>Project</th>		
+												<th>Status</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+										{% for t in data.ticket %}
+											<tr>
+												<td>{{ t.t_id }}</td>
+												<td><a href="/ticketdetails/{{t.t_id}}">{{ t.t_title }}</a></td>
+												<td>{{ t.p_name }}</td>
+												<td>
+													{% if t.t_status =='Open' %}
+													<div class="open_btn  ml-2 mr-2 mt-1 mb-1"><b>{{ t.t_status }}</b></div>
+													{% elif t.t_status == 'In progress' %}
+														<div class="progress_btn  ml-2 mr-2 mt-1 mb-1"><b>{{ t.t_status }}</b></div>
+													{% elif t.t_status == 'Closed' %}
+														<div class="closed_btn  ml-2 mr-2 mt-1 mb-1"><b>{{ t.t_status }}</b></div>
+													{% endif %}</td>
+											</tr>
+										{% endfor %}    
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						
+					</div>
+					
+					
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+             {%- include('/includes/footer.html') %}
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    {%- include('/includes/logout_prompt.html') %}
+
+    {%- include('/includes/js_imports.html') %}
+
+</body>
+
+</html>

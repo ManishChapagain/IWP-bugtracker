@@ -1,0 +1,67 @@
+<!-- DataTales Example -->
+                    <div class="card shadow mb-4">
+						{% if data.page == 'user-list'  %}
+                        <div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+
+							Users
+	
+							</h6>
+                        </div>
+						{% elif data.page == 'user-details' %}
+						<div class="card-header py-3">
+                            <h6 class="m-0 font-weight-bold text-primary">
+
+							User Information
+	
+							</h6>
+                        </div>
+						{% endif %}
+                        <div class="card-body">
+                            <div class="table-responsive">
+                                <table class="table table-bordered medium" id="dataTable" width="100%" cellspacing="0">
+                                    <thead>
+                                        <tr>
+                                            <th>User Id</th>
+                                            <th>Name</th>
+                                            <th>Email</th>
+                                            <th>Role</th>
+                                            <th>Last Update Date</th>
+											<th></th>
+                                        </tr>
+                                    </thead>
+                                    
+                                    <tbody>
+									{% for u in data.user %}
+                                        <tr>
+                                            <td>{{ u.id }}</td>
+                                            <td>{{ u.name }}</td>
+                                            <td>{{ u.email }}</td>
+                                            <td>{{ u.role }}</td>
+											<td>{{ u.last_update_date }}</td>
+											<td><b>
+													{% if data.page == 'user-details' %}
+													<a href="/admin/edit-user/{{u.id}}" >
+													Edit
+													</a>&nbsp &nbsp
+														{% if not data.is_valid_remove and data.userinfo.user_id != 1 %}
+														Delete
+														{% else %}
+														<a href="/admin/delete-user/{{u.id}}" >
+														Delete
+														</a>
+														{% endif %}
+													{% elif data.page == 'user-list'%}
+													<a href="/admin/userdetails/{{u.id}}" >
+													Manage
+													</a>
+													{% endif %}
+													</b></td>
+                                        </tr>
+                                    {% endfor %}    
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>

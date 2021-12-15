@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {%- include('/includes/head.html') %}
+	
+	<title>Tickets</title>
+
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {%- include('/includes/sidebar.html') %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {%- include('/includes/topbar.html') %}
+
+                <!-- Begin Page Content -->
+					<div class="container-fluid">
+						{% if data.page != 'projects' %}
+						<!-- Page Heading -->
+						
+						<div class="card mb-1">
+								<div class="row mb-2  mt-2">
+									{% if data.role != 'User' %}
+										<a href="/createticket" class="buttonbar btn-info btn-icon-split ml-3" >
+									{% else %}
+										<a href="/createticket" class="buttonbar selected-btn-info btn-icon-split ml-3" >
+									{% endif %}
+											<span class="text"><b>Create Ticket</b></span>
+										</a>
+									{% if data.role != 'User'%}
+											{% if data.role != 'Project Manager'%}
+												{% if data.page == 'assignedtickets' %}
+													<a href="assignedtickets" class="buttonbar selected-btn-info btn-icon-split">
+												{% else %}
+													<a href="assignedtickets" class="buttonbar btn-info btn-icon-split">	
+												{% endif %}
+													<span class="text"><b>Tickets assigned to me </b></span>
+												</a>
+											{% endif %}
+										{% if data.page == 'tickets' or data.page == 'manager_tickets' %}
+											<a href="tickets" class="buttonbar selected-btn-info btn-icon-split">
+										{% else %}
+											<a href="tickets" class="buttonbar btn-info btn-icon-split">
+										{% endif %}
+											<span class="text"><b>All Tickets</b></span>
+											</a>
+										
+										{% if data.page == 'submittedtickets' %}
+											<a href="submittedtickets" class="buttonbar selected-btn-info btn-icon-split">
+										{% else %}	
+											<a href="submittedtickets" class="buttonbar btn-info btn-icon-split">
+										{% endif %}
+											<span class="text"><b>My submitted tickets</b></span>
+											</a>
+								{% endif %}
+								
+								</div>
+						</div>
+					
+					{%- include('/includes/ticket_table.html') %}
+					
+					{% elif data.page == 'projects' %}
+					<hr>
+					{%- include('/includes/project_list.html') %}
+					
+					{% endif %}
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+             {%- include('/includes/footer.html') %}
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    {%- include('/includes/logout_prompt.html') %}
+
+    {%- include('/includes/js_imports.html') %}
+
+</body>
+
+</html>

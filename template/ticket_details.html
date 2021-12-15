@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    {%- include('/includes/head.html') %}
+	
+	<title>Ticket Details</title>
+
+</head>
+
+<body id="page-top">
+
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {%- include('/includes/sidebar.html') %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {%- include('/includes/topbar.html') %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+
+                   
+					<hr>
+					{%- include('/includes/ticket_table.html') %}
+					
+					{%  if data.userinfo['role'] != 'Admin'%}
+					<hr>
+					<div class= "row">
+						<div class="rowitem ml-4">
+							{% if data.role != 'User'%}
+							
+							{%  for t in data.ticket %}
+								{% if t.status != 'Closed'%}
+							<form action="/assigndev" method="POST">
+
+								<br/>
+								<fieldset>
+								<h6> Assign Developer </h6>
+								<div class="item">
+									
+									<select name="dev_name" id="dev_name" style="width:30rem; height:2rem" >
+									{% for dev in data.dev_list %}
+									  <option value={{dev.user_id}}> {{dev.user_name}}</option>
+									{% endfor %}
+									
+									</select>
+									{% for t in data.ticket_history %}
+										<input id="ticket_id" type="hidden" name="ticket_id" value="{{t.id}}" />
+									{% endfor%}
+									<button type="submit" href="/">Assign</button>
+								</div>
+								</fieldset>
+							 </form>
+								{% endif %}
+							 {% endfor %}
+							 {%  endif %}
+						</div>
+						
+						<div class="rowitem ml-3">
+							<div class="testbox">
+								  <form action="/submitcomment" method="POST">
+
+									<br/>
+									<fieldset>
+									  <h6>Add Comment</h6>
+									   <div class="colums">
+									  <div class="item">
+										<input id="comment" type="text" name="comment" size="50"/>
+										{% for t in data.ticket_history %}
+										<input id="ticket_id" type="hidden" name="ticket_id" value="{{t.id}}" />
+										{% endfor%}
+										<button type="submit" href="/">Submit</button>
+									  </div>
+
+									  </div>
+											</fieldset>
+									
+								  </form>
+							</div>
+						</div>
+						
+					</div>
+					{% endif %}
+					<hr>
+					
+					
+					<div class="row">
+					
+						<!-- Ticket history -->
+						<div class="detailscard shadow mb-4 ml-2">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">History for Ticket</h6>
+							</div>
+							<div class="card-body">
+								<div class="table-responsive">
+									<table class="table table-bordered medium" id="dataTable_1" width="100%" cellspacing="0">
+										<thead>
+											<tr>
+												{% if data.role !='User'%}<th>Developer</th>{% endif %}
+												<th>Status</th>                                         
+												<th>Priority</th>
+												<th>Last Updated Date</th>
+											</tr>
+										</thead>
+										
+										<tbody>
+										{% for t in data.ticket_history %}
+											<tr>
+												{% if data.role !='User'%}<td>{{ t.user_id }}</td>{% endif %}
+												<td>{{ t.status }}</td>
+												<td>{{ t.priority }}</td>
+												<td>{{ t.update_date }}</td>
+											</tr>
+										{% endfor %}    
+											
+										</tbody>
+									</table>
+								</div>
+							</div>
+						</div>
+						
+					
+						
+						<!-- Comments -->
+						<div class="detailscard shadow mb-4 ml-4 mr-0">
+							<div class="card-header py-3">
+								<h6 class="m-0 font-weight-bold text-primary">Comments</h6>
+							</div>
+							<div class="card-body medium">
+								<ul id="comments">
+								{% for comm in data.comment %}
+									<li>   {{comm.comment}} <br> -- {{comm.user_id}}, {{comm.date}} </li> 
+								{% endfor %}
+								</ul>
+							</div>
+						</div>
+						
+					</div>
+					
+					
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+             {%- include('/includes/footer.html') %}
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    {%- include('/includes/logout_prompt.html') %}
+
+    {%- include('/includes/js_imports.html') %}
+
+</body>
+
+</html>
